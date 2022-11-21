@@ -49,3 +49,4 @@ env/
 
 # Secrets
 secrets.json
+pg_pass.py

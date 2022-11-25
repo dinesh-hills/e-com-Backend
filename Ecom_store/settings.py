@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-import pg_pass
+import configparser
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -85,14 +85,17 @@ WSGI_APPLICATION = 'Ecom_store.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+dbconf = configparser.ConfigParser()
+dbconf.read('Ecom_store/postgres_db.conf')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'storefront3',
-        'USER': pg_pass.user,
-        'PASSWORD': pg_pass.password,
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'NAME': dbconf['DB']['dbname'],
+        'USER': dbconf['DB']['user'],
+        'PASSWORD': dbconf['DB']['password'],
+        'HOST': dbconf['DB']['host'],
+        'PORT': dbconf['DB']['port'],
     }
 }
 

@@ -49,4 +49,7 @@ env/
 
 # Secrets
 secrets.json
-pg_pass.py
+postgres_db.conf
+
+# Others
+remainders.txt

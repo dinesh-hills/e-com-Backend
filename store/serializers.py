@@ -1,4 +1,5 @@
 from decimal import Decimal
+from django.db.models.aggregates import Count
 from rest_framework import serializers
 from .models import Product, Collection
 
@@ -7,10 +8,11 @@ class CollectionSerializer(serializers.ModelSerializer):
         model = Collection
         fields = ['id', 'title', 'product_count']
         
-    product_count = serializers.SerializerMethodField(method_name='get_product_count')
-        
-    def get_product_count(self, collection: Collection):
+    product_count = serializers.SerializerMethodField(method_name='collection_products')
+    
+    def collection_products(self, collection: Collection):
         return collection.product_set.count()
+    
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:

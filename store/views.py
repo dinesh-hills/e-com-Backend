@@ -5,23 +5,18 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.viewsets import ModelViewSet
 from .models import Product, Collection
 from .serializers import ProductSerializer, CollectionSerializer
 
 
-class ProductList(ListCreateAPIView):
-    
+class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     
     def get_serializer_context(self):
         return {'request': self.request}
-    
 
-class ProductDetail(RetrieveUpdateDestroyAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-        
     def delete(self, request, pk):
         product = get_object_or_404(Product, pk=pk)
         if product.orderitem_set.count() > 0:
@@ -31,10 +26,6 @@ class ProductDetail(RetrieveUpdateDestroyAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
         
         
-class CollectionList(ListCreateAPIView):
+class CollectionViewSet(ModelViewSet):
     queryset = Collection.objects.prefetch_related('product_set').all()
-    serializer_class = CollectionSerializer
-
-class CollectionDetail(RetrieveUpdateDestroyAPIView):
-    queryset = Collection.objects.all()
     serializer_class = CollectionSerializer

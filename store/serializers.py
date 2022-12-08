@@ -7,6 +7,7 @@ class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collection
         fields = ['id', 'title', 'product_count']
+        read_only_fields = ['product_count']
         
     product_count = serializers.SerializerMethodField(method_name='collection_products')
     

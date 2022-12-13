@@ -1,3 +1,4 @@
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, DjangoModelPermissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
@@ -9,6 +10,7 @@ from .models import Cart, CartItem, Customer, Product, Collection, OrderItem, Re
 from .serializers import AddCartItemSerializer, CartItemSerialzier, CartSeriazlier, CustomerSerializer, ProductSerializer, CollectionSerializer, ReviewSerializer, UpdateCartItemSeriazlier
 from .filters import ProductFilter
 from .pagination import DefaultPagination
+from .permissions import IsAdminOrReadOnly, FullDjangoModelPermissions, ViewCustomerHistoryPermission
 
 
 class ProductViewSet(ModelViewSet):
@@ -19,6 +21,7 @@ class ProductViewSet(ModelViewSet):
     search_fields = ['title', 'description']
     ordering_fields = ['unit_price', 'last_update']
     pagination_class = DefaultPagination
+    permission_classes = [IsAdminOrReadOnly]
     
     def get_serializer_context(self):
         return {'request': self.request}
@@ -32,6 +35,7 @@ class ProductViewSet(ModelViewSet):
 class CollectionViewSet(ModelViewSet):
     queryset = Collection.objects.prefetch_related('product_set').all()
     serializer_class = CollectionSerializer
+    permission_classes = [IsAdminOrReadOnly]
     
     def destroy(self, request, *args, **kwargs):
         if Collection.objects.get(pk=kwargs['pk']).product_set.count() > 0:
@@ -75,14 +79,12 @@ class CartItemViewSet(ModelViewSet):
         return CartItem.objects.select_related('product').filter(cart=self.kwargs['cart_pk'])
     
     
-class CustomerViewSet(CreateModelMixin, 
-                      RetrieveModelMixin, 
-                      UpdateModelMixin, 
-                      GenericViewSet):
+class CustomerViewSet(ModelViewSet):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
+    permission_classes = [IsAdminUser]
     
-    @action(detail=False, methods=['GET', 'PUT'])
+    @action(detail=False, methods=['GET', 'PUT'], permission_classes=[IsAuthenticated])
     def me(self, request):
         (customer, created) = Customer.objects.get_or_create(user_id=request.user.id)
         if request.method == 'GET':

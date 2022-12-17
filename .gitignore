@@ -37,6 +37,9 @@ docs/_build/
 profile_default/
 ipython_config.py
 
+# VScode
+.vscode/
+
 # Environments
 env/
 

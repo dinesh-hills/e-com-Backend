@@ -45,8 +45,8 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'django_filters',
     'store',
-    # 'tag',
     'core',
+    'trail',
 ]
 
 MIDDLEWARE = [
@@ -171,3 +171,11 @@ DJOSER = {
 }
 
 CELERY_BROKER_URL = 'redis://localhost:6379/1'
+CELERY_BEAT_SCHEDULE = {
+    # Just tests.
+    'generate reports': {
+        'task': 'trail.tasks.test_worker_task',
+        'schedule': 5,
+        'args': ['Test Hello'],
+    }
+}

@@ -1,13 +1,7 @@
 from django.shortcuts import render
-from django.db.models.aggregates import Count
-from django.http import HttpResponse
-# from .models import Product, OrderItem, Order, Customer
+from .tasks import test_worker_task
 
-# def view_test(request):
-    
-#     result = Order.objects.aggregate(count=Count('id'))
-#     data = {
-#         'response_code': HttpResponse(request),
-#         'result': result
-#     }    
-#     return render(request, 'index.html', data)
+
+def test_view(request):
+    test_worker_task.delay('etst')
+    return render(request, 'index.html', {'name': 'Dinesh'})

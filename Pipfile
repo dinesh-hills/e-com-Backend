@@ -15,6 +15,7 @@ djangorestframework-simplejwt = "*"
 pillow = "*"
 redis = "*"
 celery = "*"
+flower = "*"
 
 [dev-packages]
 

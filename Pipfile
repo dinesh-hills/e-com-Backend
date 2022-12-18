@@ -17,9 +17,13 @@ redis = "*"
 celery = "*"
 flower = "*"
 pytest-django = "*"
+django-redis = "*"
+whitenoise = "*"
 
 [dev-packages]
 pytest = "*"
+locust = "*"
+django-silk = "*"
 
 [requires]
 python_version = "3.10"

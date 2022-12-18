@@ -13,22 +13,10 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from datetime import timedelta
 from pathlib import Path
-import configparser
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-cow#v(+#fs)#d)c!f)mg-2kcshzd^s-@j#-rr6$k#z&5#i)hw)'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # Application definition
@@ -61,11 +49,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-if DEBUG:
-    MIDDLEWARE += [
-        # "debug_toolbar.middleware.DebugToolbarMiddleware", 
-        # 'silk.middleware.SilkyMiddleware'
-    ]
+# if DEBUG:
+#     MIDDLEWARE += [
+#         "debug_toolbar.middleware.DebugToolbarMiddleware", 
+#         'silk.middleware.SilkyMiddleware'
+#     ]
 
 INTERNAL_IPS = [
     # ...
@@ -97,19 +85,7 @@ WSGI_APPLICATION = 'Ecom_store.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-dbconf = configparser.ConfigParser()
-dbconf.read('Ecom_store/postgres_db.conf')
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': dbconf['DB']['dbname'],
-        'USER': dbconf['DB']['user'],
-        'PASSWORD': dbconf['DB']['password'],
-        'HOST': dbconf['DB']['host'],
-        'PORT': dbconf['DB']['port'],
-    }
-}
 
 
 # Password validation
@@ -175,26 +151,6 @@ DJOSER = {
     'SERIALIZERS': {
         'user_create': 'core.serializers.UserCreateSerializer',
         'current_user': 'core.serializers.UserSerializer',
-    }
-}
-
-CELERY_BROKER_URL = 'redis://localhost:6379/1'
-CELERY_BEAT_SCHEDULE = {
-    # Just tests.
-    'generate reports': {
-        'task': 'trail.tasks.test_worker_task',
-        'schedule': 5,
-        'args': ['Test Hello'],
-    }
-}
-
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/2",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
     }
 }
 

@@ -1,7 +1,15 @@
 from django.shortcuts import render
-from .tasks import test_worker_task
+from django.views.generic import TemplateView
+import logging
 
+logger = logging.getLogger(__name__)
 
 def test_view(request):
-    test_worker_task.delay('etst')
-    return render(request, 'index.html', {'name': 'Dinesh'})
+    try:
+        logger.info('rendering template')
+        data = {
+            'name': 'Dinesh'
+        }
+        return render(request, 'trail/index.html', data)
+    except ValueError as e:
+        logger.error(e)
